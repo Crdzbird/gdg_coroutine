@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "ni.devotion.mvvm"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary true
+        buildConfigField "String", "API_URL", "\"https://nicaragua-eterna.herokuapp.com\""
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+        exclude 'META-INF/library_release.kotlin_module'
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
+    dataBinding {
+        enabled = true
+    }
+    androidExtensions {
+        experimental = true
+    }
+    compileOptions {
+        targetCompatibility = '1.8'
+        sourceCompatibility = '1.8'
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental"]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Kotlin.kotlin
+    implementation AndroidX.appcompat
+    implementation AndroidX.androidXcore
+    implementation AndroidX.constraintlayout
+    implementation AndroidX.annotations
+    implementation Retrofit.retrofit
+    implementation Retrofit.retrofitConverter
+    implementation Retrofit.okHttp
+    implementation Libs.timber
+    implementation Libs.vault
+    implementation Libs.rootBeer
+    implementation AndroidX.lifecycleViewmodel
+    implementation AndroidX.lifecycleViewmodelKtx
+    implementation AndroidX.viewPager2
+
+    implementation Koin.core
+    implementation Koin.android
+    implementation Koin.scope
+    implementation Koin.viewModel
+    implementation Koin.extension
+    kapt Databinding.databinding
+
+    implementation Coroutines.coroutine
+    implementation Coroutines.coroutineAdapter
+
+    implementation GoogleLibs.gson
+    implementation GoogleLibs.material
+
+    testImplementation Koin.test
+    testImplementation TestLibs.junit
+    androidTestImplementation TestLibs.testrunner
+    androidTestImplementation TestLibs.espresso
+}
